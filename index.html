@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CheckJeUitgaven</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Persoonlijk budgetdashboard</p>
+          <h1>CheckJeUitgaven</h1>
+          <p class="hero-copy">
+            Voeg je inkomsten en uitgaven toe, bekijk trends en hou grip op je geld.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="refreshBtn" class="btn btn-secondary" type="button">Ververs data</button>
+          <button id="logoutBtn" class="btn btn-secondary" type="button">Uitloggen</button>
+        </div>
+      </header>
+
+      <section class="panel auth-panel">
+        <div class="panel-head row">
+          <div>
+            <h3>Inloggen</h3>
+            <p>Maak een account of log in met e-mail en wachtwoord.</p>
+          </div>
+          <p id="userMeta" class="user-meta">Niet ingelogd</p>
+        </div>
+
+        <div class="auth-mode-row">
+          <button class="btn-mini" type="button" data-auth-mode="login">Inloggen</button>
+          <button class="btn-mini" type="button" data-auth-mode="register">Registreren</button>
+        </div>
+
+        <form id="authForm" class="form-grid auth-grid">
+          <label>
+            E-mail
+            <input id="authEmail" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Wachtwoord
+            <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required />
+          </label>
+          <div class="form-actions full-width">
+            <button id="authSubmitBtn" type="submit" class="btn btn-primary">Inloggen</button>
+          </div>
+        </form>
+      </section>
+
+      <div id="appContent" class="hidden">
+        <section class="stats-grid">
+          <article class="stat-card">
+            <p>Inkomsten</p>
+            <h2 id="incomeTotal">€0,00</h2>
+          </article>
+          <article class="stat-card danger">
+            <p>Uitgaven</p>
+            <h2 id="expenseTotal">€0,00</h2>
+          </article>
+          <article class="stat-card accent">
+            <p>Saldo</p>
+            <h2 id="balanceTotal">€0,00</h2>
+          </article>
+        </section>
+
+        <main class="content-grid">
+          <section class="panel form-panel">
+            <div class="panel-head">
+              <h3>Nieuwe transactie</h3>
+              <p>Alles wordt direct opgeslagen in Firebase.</p>
+            </div>
+
+            <form id="transactionForm" class="form-grid">
+              <label>
+                Type
+                <select id="type" required>
+                  <option value="expense">Uitgave</option>
+                  <option value="income">Inkomst</option>
+                </select>
+              </label>
+
+              <label>
+                Bedrag (€)
+                <input id="amount" type="number" min="0" step="0.01" placeholder="0.00" required />
+              </label>
+
+              <label>
+                Categorie
+                <input id="category" type="text" maxlength="40" placeholder="Boodschappen" required />
+              </label>
+
+              <label>
+                Datum
+                <input id="date" type="date" required />
+              </label>
+
+              <label class="full-width">
+                Notitie
+                <input id="note" type="text" maxlength="90" placeholder="Optioneel" />
+              </label>
+
+              <div class="form-actions full-width">
+                <button type="submit" class="btn btn-primary" id="submitBtn">Opslaan</button>
+                <button type="button" class="btn btn-ghost" id="resetBtn">Leegmaken</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel chart-panel">
+            <div class="panel-head">
+              <h3>Grafieken</h3>
+              <p>Direct berekend op basis van je transacties.</p>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </section>
+        </main>
+
+        <section class="panel list-panel">
+          <div class="panel-head row">
+            <div>
+              <h3>Transacties</h3>
+              <p>Wijzig of verwijder items met de knoppen.</p>
+            </div>
+            <label class="filter-inline">
+              Filter
+              <select id="filterType">
+                <option value="all">Alles</option>
+                <option value="income">Alleen inkomsten</option>
+                <option value="expense">Alleen uitgaven</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Datum</th>
+                  <th>Type</th>
+                  <th>Categorie</th>
+                  <th>Bedrag</th>
+                  <th>Notitie</th>
+                  <th>Acties</th>
+                </tr>
+              </thead>
+              <tbody id="transactionsBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <p id="statusMessage" class="status" aria-live="polite"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
